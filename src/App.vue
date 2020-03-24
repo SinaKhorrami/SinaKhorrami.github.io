@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <h1> Hello, World </h1>
+    <IntroSection />
   </div>
 </template>
 
 <script>
+import IntroSection from './components/IntroSection'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    IntroSection
+  }
 }
 </script>
 
