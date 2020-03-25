@@ -1,0 +1,87 @@
+name: Build & Deploy
+on:
+  push:
+    branches:
+      - dev
+  schedule:
+    - cron: '0 4 * * *'
+jobs:
+  fetch:
+    name: Fetch Project List
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Use Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Fetch projects
+        run: python scripts/fetch_projects.py
+        env:
+          access_token: ${{ secrets.PAT }}
+      
+      - name: Upload _data folder
+        uses: actions/upload-artifact@v1
+        with:
+          name: data
+          path: _data
+  build:
+    name: Build Project
+    needs: fetch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Download _data folder
+        uses: actions/download-artifact@v1
+        with:
+          name: data
+          path: _data
+      
+      - name: ls files folders
+        run: ls
+      
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      
+      - name: Install Dependencies
+        run: npm ci
+      
+      - name: Build ...
+        run: npm run build --if-present
+      
+      - name: Upload production artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: dist
+  deploy:
+    name: Deploy Project
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download production artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: dist
+
+      - name: Deploy
+        run: |
+          sh ./scripts/deploy.sh
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
