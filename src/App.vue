@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <IntroSection />
+    <ProjectSection />
   </div>
 </template>
 
 <script>
 import IntroSection from './components/IntroSection'
+import ProjectSection from './components/ProjectSection'
 
 export default {
   name: 'App',
   components: {
-    IntroSection
+    IntroSection,
+    ProjectSection
   }
 }
 </script>
