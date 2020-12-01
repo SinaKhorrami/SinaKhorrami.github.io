@@ -1,0 +1,47 @@
+name: Build & Deploy
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build ...
+        run: npm run build --if-present
+
+      - name: Upload production artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: dist
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Download production artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: dist
+
+      - name: Deploy ...
+        run: |
+          sh ./scripts/deploy.sh
+        env:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
