@@ -6,7 +6,7 @@ cd dist
 
 git init
 
-git config --local user.email "sinakhorami94@gmail.com"
+git config --local user.email "sinakhorrami94@gmail.com"
 git config --local user.name "Sina"
 
 git add --all

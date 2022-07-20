@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3> Sina Khorami </h3>
+    <h3> Sina Khorrami </h3>
     <p class="text-monospace"> Developer </p>
     <a
       v-for="media in medias"
@@ -35,12 +35,12 @@ export default {
       {
         id: 'gmail',
         source: Gmail,
-        link: 'mailto:sinakhorami94@gmail.com'
+        link: 'mailto:sinakhorrami94@gmail.com'
       },
       {
         id: 'linkedin',
         source: Linkedin,
-        link: 'https://www.linkedin.com/in/sina-khorami/'
+        link: 'https://www.linkedin.com/in/sina-khorrami/'
       },
       {
         id: 'kaggle',
@@ -50,7 +50,7 @@ export default {
       {
         id: 'github',
         source: Github,
-        link: 'https://github.com/SinaKhorami'
+        link: 'https://github.com/SinaKhorrami'
       },
       {
         id: 'stackoverflow',
